@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { getTransactions } from "@/actions/transactions"
 import { getCategories } from "@/actions/categories"
-import { TransactionType } from "@prisma/client"
+import type { TransactionType } from "@/types"
 import { formatCurrency, toDecimal } from "@/lib/utils"
 
 export const metadata: Metadata = { title: "Movimientos" }

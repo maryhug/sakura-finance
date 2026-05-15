@@ -1,6 +1,7 @@
-import type { Transaction, Category, TransactionType, GoalStatus } from "@prisma/client"
+import type { Transaction, Category } from "@prisma/client"
 
-export type { TransactionType, GoalStatus }
+export type TransactionType = "INCOME" | "EXPENSE"
+export type GoalStatus = "ACTIVE" | "COMPLETED" | "PAUSED"
 
 export type TransactionWithCategory = Transaction & {
   category: Category | null

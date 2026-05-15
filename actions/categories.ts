@@ -4,9 +4,10 @@ import { revalidatePath } from "next/cache"
 import { prisma } from "@/lib/prisma"
 import { requireAuth } from "@/lib/session"
 import { categorySchema } from "@/lib/validations"
-import { TransactionType } from "@prisma/client"
 import type { ActionResult } from "@/types"
 import type { Category } from "@prisma/client"
+
+type TransactionType = "INCOME" | "EXPENSE"
 
 export async function getCategories(type?: TransactionType): Promise<Category[]> {
   const user = await requireAuth()

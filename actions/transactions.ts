@@ -4,10 +4,8 @@ import { revalidatePath } from "next/cache"
 import { prisma } from "@/lib/prisma"
 import { requireAuth } from "@/lib/session"
 import { transactionSchema } from "@/lib/validations"
-import { TransactionType } from "@prisma/client"
 import { startOfMonth, endOfMonth, subMonths } from "date-fns"
-import type { ActionResult, MonthlyData, CategorySpending, DashboardStats } from "@/types"
-import type { TransactionWithCategory } from "@/types"
+import type { ActionResult, MonthlyData, CategorySpending, DashboardStats, TransactionType, TransactionWithCategory } from "@/types"
 
 export async function createTransaction(formData: FormData): Promise<ActionResult> {
   const user = await requireAuth()
