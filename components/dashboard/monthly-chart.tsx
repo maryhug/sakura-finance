@@ -10,6 +10,7 @@ import {
   ResponsiveContainer,
   Legend,
 } from "recharts"
+import { BarChart3 } from "lucide-react"
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card"
 import { formatCurrency } from "@/lib/utils"
 import { EmptyState } from "@/components/ui/empty-state"
@@ -41,7 +42,7 @@ export function MonthlyChart({ data }: { data: MonthlyData[] }) {
       </CardHeader>
       <CardContent>
         {!hasData ? (
-          <EmptyState icon="📊" title="Sin datos aún" description="Registra movimientos para ver tu evolución." />
+          <EmptyState icon={<BarChart3 className="h-10 w-10" />} title="Sin datos aún" description="Registra movimientos para ver tu evolución." />
         ) : (
           <ResponsiveContainer width="100%" height={260}>
             <AreaChart data={data} margin={{ top: 4, right: 4, left: -10, bottom: 0 }}>

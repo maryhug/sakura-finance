@@ -10,13 +10,9 @@ import { Toast, useToast } from "@/components/ui/toast"
 import { categorySchema, type CategoryInput } from "@/lib/validations"
 import { createCategory, updateCategory } from "@/actions/categories"
 import { CATEGORY_COLORS, cn } from "@/lib/utils"
+import { CATEGORY_ICONS } from "@/lib/icons"
+import { TrendingUp, TrendingDown } from "lucide-react"
 import type { Category } from "@prisma/client"
-
-const ICONS = [
-  "🍕", "🛒", "🏠", "💊", "🚌", "🎮", "📚", "👗",
-  "✈️", "💄", "🐾", "🎵", "🏋️", "☕", "🎓", "💰",
-  "💼", "🎁", "🔧", "📱", "🌿", "🍷", "🎬", "🚗",
-]
 
 interface Props {
   category?: Category
@@ -28,7 +24,7 @@ export function CategoryForm({ category, onSuccess, redirectOnSuccess }: Props) 
   const router = useRouter()
   const [isPending, startTransition] = useTransition()
   const { toast, show, hide } = useToast()
-  const [selectedIcon, setSelectedIcon] = useState(category?.icon ?? "🏷️")
+  const [selectedIcon, setSelectedIcon] = useState(category?.icon ?? "tag")
   const [selectedColor, setSelectedColor] = useState(category?.color ?? "#f472b6")
   const [selectedType, setSelectedType] = useState<"INCOME" | "EXPENSE">((category?.type as "INCOME" | "EXPENSE") ?? "EXPENSE")
 
@@ -41,7 +37,7 @@ export function CategoryForm({ category, onSuccess, redirectOnSuccess }: Props) 
     resolver: zodResolver(categorySchema),
     defaultValues: {
       name: category?.name ?? "",
-      icon: category?.icon ?? "🏷️",
+      icon: category?.icon ?? "tag",
       color: category?.color ?? "#f472b6",
       type: (category?.type as "INCOME" | "EXPENSE") ?? "EXPENSE",
     },
@@ -95,7 +91,12 @@ export function CategoryForm({ category, onSuccess, redirectOnSuccess }: Props) 
                   className="sr-only"
                   onChange={() => { setSelectedType(t); setValue("type", t) }}
                 />
-                <span>{t === "INCOME" ? "💚 Ingreso" : "🌸 Gasto"}</span>
+                <span className="flex items-center gap-1">
+                  {t === "INCOME"
+                    ? <TrendingUp className="h-3.5 w-3.5" />
+                    : <TrendingDown className="h-3.5 w-3.5" />}
+                  {t === "INCOME" ? "Ingreso" : "Gasto"}
+                </span>
               </label>
             ))}
           </div>
@@ -104,40 +105,20 @@ export function CategoryForm({ category, onSuccess, redirectOnSuccess }: Props) 
         {/* Icon grid */}
         <div>
           <p className="text-sm font-semibold text-[var(--text-muted)] mb-2">Ícono</p>
-
-          {/* Manual input */}
-          <div className="flex items-center gap-3 mb-3">
-            <div className="w-12 h-12 rounded-2xl bg-[var(--surface-2)] border-2 border-sakura-200 flex items-center justify-center text-2xl flex-shrink-0 select-none">
-              {selectedIcon}
-            </div>
-            <input
-              type="text"
-              placeholder="Escribí un emoji, ej: 🎯"
-              defaultValue={selectedIcon}
-              onChange={(e) => {
-                const val = [...e.target.value].slice(0, 2).join("")
-                if (val) { setSelectedIcon(val); setValue("icon", val) }
-              }}
-              className="input-sakura"
-              style={{ paddingLeft: "1rem" }}
-            />
-          </div>
-
-          <p className="text-xs text-[var(--text-subtle)] mb-2">O elegí de la lista:</p>
           <div className="grid grid-cols-8 gap-1.5">
-            {ICONS.map((ic) => (
+            {CATEGORY_ICONS.map(({ id, Icon }) => (
               <button
-                key={ic}
+                key={id}
                 type="button"
-                onClick={() => { setSelectedIcon(ic); setValue("icon", ic) }}
+                onClick={() => { setSelectedIcon(id); setValue("icon", id) }}
                 className={cn(
-                  "w-9 h-9 rounded-xl text-lg transition-all flex items-center justify-center",
-                  selectedIcon === ic
-                    ? "bg-sakura-100 border-2 border-sakura-400"
-                    : "bg-[var(--surface-2)] hover:bg-sakura-50 border border-[var(--border)]"
+                  "w-9 h-9 rounded-xl transition-all flex items-center justify-center",
+                  selectedIcon === id
+                    ? "bg-sakura-100 border-2 border-sakura-400 text-sakura-600"
+                    : "bg-[var(--surface-2)] hover:bg-sakura-50 border border-[var(--border)] text-[var(--text-muted)]"
                 )}
               >
-                {ic}
+                <Icon className="h-4 w-4" />
               </button>
             ))}
           </div>

@@ -1,5 +1,5 @@
 import Link from "next/link"
-import { ArrowRight, TrendingUp, TrendingDown } from "lucide-react"
+import { ArrowRight, TrendingUp, TrendingDown, Banknote } from "lucide-react"
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -24,7 +24,7 @@ export function RecentTransactions({ transactions }: { transactions: Transaction
       <CardContent className="pt-2">
         {transactions.length === 0 ? (
           <EmptyState
-            icon="💸"
+            icon={<Banknote className="h-10 w-10" />}
             title="Sin movimientos aún"
             description="Registra tu primer ingreso o gasto."
             action={

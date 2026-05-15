@@ -105,9 +105,11 @@ export function Sidebar({ user, open, onClose }: SidebarProps) {
 
         {/* Decorative */}
         <div className="mx-4 mb-3 p-3 rounded-2xl bg-gradient-to-br from-sakura-50 to-petal-50 border border-sakura-100 text-center">
-          <p className="text-lg animate-float select-none">🌸</p>
+          <div className="flex justify-center animate-float text-sakura-400">
+            <Sparkles className="h-5 w-5" />
+          </div>
           <p className="text-xs font-semibold text-sakura-600 mt-1">¡Hola, {user.name?.split(" ")[0] ?? "amiga"}!</p>
-          <p className="text-xs text-[var(--text-subtle)]">Cuida tus finanzas ✨</p>
+          <p className="text-xs text-[var(--text-subtle)]">Cuida tus finanzas</p>
         </div>
 
         {/* User */}

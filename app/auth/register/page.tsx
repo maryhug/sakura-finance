@@ -34,7 +34,7 @@ export default function RegisterPage() {
       if (result?.error) {
         show(result.error, "error")
       } else {
-        show("¡Cuenta creada! Iniciando sesión... ✿", "success")
+        show("¡Cuenta creada! Iniciando sesión...", "success")
         setTimeout(() => router.push("/auth/signin"), 1000)
       }
     })
@@ -47,7 +47,7 @@ export default function RegisterPage() {
           <Sparkles className="h-7 w-7 text-white" />
         </div>
         <h1 className="text-2xl font-extrabold text-[var(--text)]">Crear cuenta</h1>
-        <p className="text-sm text-[var(--text-subtle)]">Empieza a controlar tus finanzas ✿</p>
+        <p className="text-sm text-[var(--text-subtle)]">Empieza a controlar tus finanzas</p>
       </div>
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">

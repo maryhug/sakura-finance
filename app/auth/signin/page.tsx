@@ -38,7 +38,7 @@ export default function SignInPage() {
           <Sparkles className="h-7 w-7 text-white" />
         </div>
         <h1 className="text-2xl font-extrabold text-[var(--text)]">Sakura Finance</h1>
-        <p className="text-sm text-[var(--text-subtle)]">Inicia sesión para ver tus finanzas ✿</p>
+        <p className="text-sm text-[var(--text-subtle)]">Inicia sesión para ver tus finanzas</p>
       </div>
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">

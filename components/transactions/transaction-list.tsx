@@ -2,6 +2,7 @@ import { TransactionItem } from "@/components/transactions/transaction-item"
 import { EmptyState } from "@/components/ui/empty-state"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
+import { Banknote } from "lucide-react"
 import type { TransactionWithCategory } from "@/types"
 import type { Category } from "@prisma/client"
 
@@ -14,7 +15,7 @@ export function TransactionList({ transactions, categories }: Props) {
   if (transactions.length === 0) {
     return (
       <EmptyState
-        icon="💸"
+        icon={<Banknote className="h-10 w-10" />}
         title="Sin movimientos"
         description="Registra un ingreso o gasto para empezar."
         action={

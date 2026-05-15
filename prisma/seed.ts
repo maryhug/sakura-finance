@@ -9,36 +9,36 @@ const adapter = new PrismaNeon({ connectionString: process.env.DATABASE_URL! })
 const prisma = new PrismaClient({ adapter })
 
 const DEFAULT_EXPENSE_CATEGORIES = [
-  { name: "Alimentación", icon: "🍕", color: "#f472b6" },
-  { name: "Supermercado", icon: "🛒", color: "#ec4899" },
-  { name: "Vivienda / Alquiler", icon: "🏠", color: "#a855f7" },
-  { name: "Transporte", icon: "🚌", color: "#6366f1" },
-  { name: "Salud", icon: "💊", color: "#22c55e" },
-  { name: "Entretenimiento", icon: "🎮", color: "#f97316" },
-  { name: "Ropa y belleza", icon: "👗", color: "#e879f9" },
-  { name: "Educación", icon: "📚", color: "#3b82f6" },
-  { name: "Tecnología", icon: "📱", color: "#06b6d4" },
-  { name: "Mascotas", icon: "🐾", color: "#84cc16" },
-  { name: "Servicios (luz, gas, etc.)", icon: "🔧", color: "#eab308" },
-  { name: "Suscripciones", icon: "📺", color: "#8b5cf6" },
-  { name: "Viajes", icon: "✈️", color: "#0ea5e9" },
-  { name: "Cafeterías / Restaurantes", icon: "☕", color: "#f59e0b" },
-  { name: "Regalos", icon: "🎁", color: "#f43f5e" },
-  { name: "Otros gastos", icon: "🌸", color: "#94a3b8" },
+  { name: "Alimentación", icon: "utensils", color: "#f472b6" },
+  { name: "Supermercado", icon: "shopping-cart", color: "#ec4899" },
+  { name: "Vivienda / Alquiler", icon: "home", color: "#a855f7" },
+  { name: "Transporte", icon: "bus", color: "#6366f1" },
+  { name: "Salud", icon: "pill", color: "#22c55e" },
+  { name: "Entretenimiento", icon: "clapperboard", color: "#f97316" },
+  { name: "Ropa y belleza", icon: "shirt", color: "#e879f9" },
+  { name: "Educación", icon: "book", color: "#3b82f6" },
+  { name: "Tecnología", icon: "smartphone", color: "#06b6d4" },
+  { name: "Mascotas", icon: "paw", color: "#84cc16" },
+  { name: "Servicios (luz, gas, etc.)", icon: "wrench", color: "#eab308" },
+  { name: "Suscripciones", icon: "monitor", color: "#8b5cf6" },
+  { name: "Viajes", icon: "plane", color: "#0ea5e9" },
+  { name: "Cafeterías / Restaurantes", icon: "coffee", color: "#f59e0b" },
+  { name: "Regalos", icon: "gift", color: "#f43f5e" },
+  { name: "Otros gastos", icon: "tag", color: "#94a3b8" },
 ]
 
 const DEFAULT_INCOME_CATEGORIES = [
-  { name: "Salario", icon: "💼", color: "#22c55e" },
-  { name: "Freelance", icon: "💻", color: "#4ade80" },
-  { name: "Inversiones", icon: "📈", color: "#10b981" },
-  { name: "Ventas", icon: "🛍️", color: "#34d399" },
-  { name: "Bonos / Aguinaldo", icon: "🎉", color: "#6ee7b7" },
-  { name: "Alquileres cobrados", icon: "🏘️", color: "#a7f3d0" },
-  { name: "Otros ingresos", icon: "💰", color: "#86efac" },
+  { name: "Salario", icon: "briefcase", color: "#22c55e" },
+  { name: "Freelance", icon: "laptop", color: "#4ade80" },
+  { name: "Inversiones", icon: "trending-up", color: "#10b981" },
+  { name: "Ventas", icon: "shopping-bag", color: "#34d399" },
+  { name: "Bonos / Aguinaldo", icon: "party-popper", color: "#6ee7b7" },
+  { name: "Alquileres cobrados", icon: "building", color: "#a7f3d0" },
+  { name: "Otros ingresos", icon: "wallet", color: "#86efac" },
 ]
 
 async function main() {
-  console.log("🌸 Iniciando seed de Sakura Finance...")
+  console.log("Iniciando seed de Sakura Finance...")
 
   // Clear existing default categories
   await prisma.category.deleteMany({ where: { isDefault: true, userId: null } })
@@ -59,7 +59,7 @@ async function main() {
   }
   console.log(`✅ ${DEFAULT_INCOME_CATEGORIES.length} categorías de ingreso creadas`)
 
-  console.log("✿ Seed completado!")
+  console.log("Seed completado!")
 }
 
 main()

@@ -1,4 +1,5 @@
 import type { Metadata } from "next"
+import { PiggyBank, CheckCircle2 } from "lucide-react"
 import { getSavingsGoals } from "@/actions/savings"
 import { PageHeader } from "@/components/layout/page-header"
 import { SavingsGoalCard } from "@/components/savings/savings-goal-card"
@@ -46,8 +47,9 @@ export default async function SavingsPage() {
       {/* Active goals */}
       {active.length > 0 && (
         <div>
-          <h2 className="text-sm font-bold text-[var(--text-muted)] uppercase tracking-wide mb-3">
-            Activas ✿
+          <h2 className="text-sm font-bold text-[var(--text-muted)] uppercase tracking-wide mb-3 flex items-center gap-2">
+            <PiggyBank className="h-3.5 w-3.5 text-sakura-400" />
+            Activas
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             {active.map((goal) => (
@@ -60,8 +62,9 @@ export default async function SavingsPage() {
       {/* Completed goals */}
       {completed.length > 0 && (
         <div>
-          <h2 className="text-sm font-bold text-[var(--text-muted)] uppercase tracking-wide mb-3">
-            Completadas 🎉
+          <h2 className="text-sm font-bold text-[var(--text-muted)] uppercase tracking-wide mb-3 flex items-center gap-2">
+            <CheckCircle2 className="h-3.5 w-3.5 text-mint-500" />
+            Completadas
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             {completed.map((goal) => (
@@ -73,7 +76,7 @@ export default async function SavingsPage() {
 
       {goals.length === 0 && (
         <EmptyState
-          icon="🐷"
+          icon={<PiggyBank className="h-10 w-10" />}
           title="Sin metas de ahorro aún"
           description="Crea tu primera meta y empieza a ahorrar para lo que sueñas."
           action={<AddSavingsGoalButton />}

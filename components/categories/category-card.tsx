@@ -1,7 +1,8 @@
 "use client"
 
 import { useState, useTransition } from "react"
-import { Pencil, Trash2 } from "lucide-react"
+import { Pencil, Trash2, Tag } from "lucide-react"
+import { ICON_MAP } from "@/lib/icons"
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -38,10 +39,13 @@ export function CategoryCard({ category }: Props) {
       <Card className="group">
         <CardContent className="flex items-center gap-3 pt-4 pb-4">
           <div
-            className="w-10 h-10 rounded-2xl flex items-center justify-center text-xl shrink-0"
+            className="w-10 h-10 rounded-2xl flex items-center justify-center shrink-0"
             style={{ background: category.color + "20", border: `2px solid ${category.color}40` }}
           >
-            <span style={{ color: category.color }}>{category.icon}</span>
+            {(() => {
+              const Icon = ICON_MAP[category.icon] ?? Tag
+              return <Icon className="h-5 w-5" style={{ color: category.color }} />
+            })()}
           </div>
           <div className="flex-1 min-w-0">
             <p className="font-semibold text-sm text-[var(--text)]">{category.name}</p>

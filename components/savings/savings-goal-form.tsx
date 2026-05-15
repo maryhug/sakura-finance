@@ -12,20 +12,8 @@ import { savingsGoalSchema, type SavingsGoalInput } from "@/lib/validations"
 import { createSavingsGoal, updateSavingsGoal } from "@/actions/savings"
 import { CATEGORY_COLORS } from "@/lib/utils"
 import { cn } from "@/lib/utils"
+import { SAVINGS_ICONS } from "@/lib/icons"
 import type { SavingsGoal } from "@prisma/client"
-
-const ICONS = [
-  { id: "piggy-bank", emoji: "🐷" },
-  { id: "house", emoji: "🏠" },
-  { id: "car", emoji: "🚗" },
-  { id: "plane", emoji: "✈️" },
-  { id: "laptop", emoji: "💻" },
-  { id: "ring", emoji: "💍" },
-  { id: "baby", emoji: "👶" },
-  { id: "heart", emoji: "💕" },
-  { id: "star", emoji: "⭐" },
-  { id: "gift", emoji: "🎁" },
-]
 
 interface Props {
   goal?: SavingsGoal
@@ -77,7 +65,7 @@ export function SavingsGoalForm({ goal, onSuccess, redirectOnSuccess }: Props) {
         : await createSavingsGoal(formData)
 
       if (result.success) {
-        show(goal ? "Meta actualizada ✿" : "Meta creada ✿", "success")
+        show(goal ? "Meta actualizada" : "Meta creada", "success")
         setTimeout(() => {
           if (redirectOnSuccess) router.push(redirectOnSuccess)
           else onSuccess?.()
@@ -104,19 +92,19 @@ export function SavingsGoalForm({ goal, onSuccess, redirectOnSuccess }: Props) {
         <div>
           <p className="text-sm font-semibold text-[var(--text-muted)] mb-2">Ícono</p>
           <div className="flex flex-wrap gap-2">
-            {ICONS.map((ic) => (
+            {SAVINGS_ICONS.map(({ id, Icon }) => (
               <button
-                key={ic.id}
+                key={id}
                 type="button"
-                onClick={() => selectIcon(ic.id)}
+                onClick={() => selectIcon(id)}
                 className={cn(
-                  "w-10 h-10 rounded-xl text-xl transition-all",
-                  selectedIcon === ic.id
-                    ? "bg-sakura-100 border-2 border-sakura-400 scale-110"
-                    : "bg-[var(--surface-2)] hover:bg-sakura-50 border border-[var(--border)]"
+                  "w-10 h-10 rounded-xl transition-all flex items-center justify-center",
+                  selectedIcon === id
+                    ? "bg-sakura-100 border-2 border-sakura-400 scale-110 text-sakura-600"
+                    : "bg-[var(--surface-2)] hover:bg-sakura-50 border border-[var(--border)] text-[var(--text-muted)]"
                 )}
               >
-                {ic.emoji}
+                <Icon className="h-5 w-5" />
               </button>
             ))}
           </div>

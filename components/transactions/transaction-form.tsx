@@ -65,7 +65,7 @@ export function TransactionForm({ categories, transaction, onSuccess }: Props) {
         : await createTransaction(formData)
 
       if (result.success) {
-        show(transaction ? "Movimiento actualizado ✿" : "Movimiento creado ✿", "success")
+        show(transaction ? "Movimiento actualizado" : "Movimiento creado", "success")
         setTimeout(() => {
           onSuccess?.()
           router.push("/transactions")

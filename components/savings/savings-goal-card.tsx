@@ -1,7 +1,8 @@
 "use client"
 
 import { useState, useTransition } from "react"
-import { Pencil, Trash2, Check, Calendar } from "lucide-react"
+import { Pencil, Trash2, Check, Calendar, PartyPopper, Tag } from "lucide-react"
+import { ICON_MAP } from "@/lib/icons"
 import { Card, CardContent } from "@/components/ui/card"
 import { Progress } from "@/components/ui/progress"
 import { Button } from "@/components/ui/button"
@@ -13,22 +14,6 @@ import { deleteSavingsGoal, markGoalCompleted } from "@/actions/savings"
 import { formatCurrency, formatDate, toDecimal } from "@/lib/utils"
 import type { SavingsGoal } from "@prisma/client"
 
-const GOAL_ICONS: Record<string, string> = {
-  "piggy-bank": "🐷",
-  house: "🏠",
-  car: "🚗",
-  plane: "✈️",
-  laptop: "💻",
-  ring: "💍",
-  baby: "👶",
-  heart: "💕",
-  star: "⭐",
-  gift: "🎁",
-}
-
-function getGoalEmoji(icon: string): string {
-  return GOAL_ICONS[icon] ?? "🎯"
-}
 
 interface Props {
   goal: SavingsGoal
@@ -61,7 +46,7 @@ export function SavingsGoalCard({ goal }: Props) {
   function handleComplete() {
     startTransition(async () => {
       const result = await markGoalCompleted(goal.id)
-      if (result.success) show("¡Meta completada! 🎉", "success")
+      if (result.success) show("¡Meta completada!", "success")
       else show(result.error ?? "Error", "error")
     })
   }
@@ -73,10 +58,13 @@ export function SavingsGoalCard({ goal }: Props) {
           <div className="flex items-start justify-between mb-3">
             <div className="flex items-center gap-3">
               <div
-                className="w-11 h-11 rounded-2xl flex items-center justify-center text-xl shrink-0"
+                className="w-11 h-11 rounded-2xl flex items-center justify-center shrink-0"
                 style={{ background: goal.color + "20", border: `2px solid ${goal.color}30` }}
               >
-                {getGoalEmoji(goal.icon)}
+                {(() => {
+                  const Icon = ICON_MAP[goal.icon] ?? Tag
+                  return <Icon className="h-5 w-5" style={{ color: goal.color }} />
+                })()}
               </div>
               <div>
                 <p className="font-bold text-sm text-[var(--text)]">{goal.name}</p>
@@ -124,7 +112,9 @@ export function SavingsGoalCard({ goal }: Props) {
 
             <div className="flex items-center justify-between">
               <span className="text-xs text-[var(--text-subtle)]">
-                {isComplete ? "🎉 ¡Meta alcanzada!" : `Faltan ${formatCurrency(remaining)}`}
+                {isComplete
+                ? <span className="flex items-center gap-1"><PartyPopper className="h-3 w-3" /> ¡Meta alcanzada!</span>
+                : `Faltan ${formatCurrency(remaining)}`}
               </span>
               <Badge
                 variant={isComplete ? "income" : goal.status === "PAUSED" ? "soft" : "default"}

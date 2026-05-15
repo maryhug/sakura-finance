@@ -11,7 +11,7 @@ const nunito = Nunito({
 
 export const metadata: Metadata = {
   title: {
-    default: "Sakura Finance ✿",
+    default: "Sakura Finance",
     template: "%s — Sakura Finance",
   },
   description: "Tu app de finanzas personales: bonita, simple y poderosa.",

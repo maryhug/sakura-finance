@@ -1,6 +1,7 @@
 "use client"
 
 import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from "recharts"
+import { PieChart as PieChartIcon } from "lucide-react"
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card"
 import { formatCurrency } from "@/lib/utils"
 import { EmptyState } from "@/components/ui/empty-state"
@@ -30,7 +31,7 @@ export function SpendingChart({ data }: Props) {
       </CardHeader>
       <CardContent>
         {data.length === 0 ? (
-          <EmptyState icon="🍰" title="Sin gastos este mes" description="Registra un gasto para ver el desglose." />
+          <EmptyState icon={<PieChartIcon className="h-10 w-10" />} title="Sin gastos este mes" description="Registra un gasto para ver el desglose." />
         ) : (
           <>
             <ResponsiveContainer width="100%" height={220}>

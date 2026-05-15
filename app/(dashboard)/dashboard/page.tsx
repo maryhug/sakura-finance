@@ -33,7 +33,7 @@ export default async function DashboardPage() {
   return (
     <div className="space-y-6 animate-fade-in">
       <PageHeader
-        title={`Hola, ${user.name?.split(" ")[0] ?? "amiga"} ✿`}
+        title={`Hola, ${user.name?.split(" ")[0] ?? "amiga"}`}
         subtitle="Aquí está el resumen de tus finanzas"
         action={
           <Link href="/transactions/new">

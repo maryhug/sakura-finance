@@ -1,4 +1,5 @@
 import type { Metadata } from "next"
+import { TrendingDown, TrendingUp, Tag } from "lucide-react"
 import { PageHeader } from "@/components/layout/page-header"
 import { CategoryCard } from "@/components/categories/category-card"
 import { EmptyState } from "@/components/ui/empty-state"
@@ -31,11 +32,12 @@ export default async function CategoriesPage() {
       {/* Expense categories */}
       <div>
         <h2 className="text-sm font-bold text-[var(--text-muted)] uppercase tracking-wide mb-3 flex items-center gap-2">
-          🌸 Gastos
+          <TrendingDown className="h-3.5 w-3.5 text-petal-400" />
+          Gastos
           <span className="font-normal text-[var(--text-subtle)]">({expense.length})</span>
         </h2>
         {expense.length === 0 ? (
-          <EmptyState icon="🏷️" title="Sin categorías de gasto" />
+          <EmptyState icon={<Tag className="h-10 w-10" />} title="Sin categorías de gasto" />
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
             {expense.map((cat) => (
@@ -48,11 +50,12 @@ export default async function CategoriesPage() {
       {/* Income categories */}
       <div>
         <h2 className="text-sm font-bold text-[var(--text-muted)] uppercase tracking-wide mb-3 flex items-center gap-2">
-          💚 Ingresos
+          <TrendingUp className="h-3.5 w-3.5 text-mint-500" />
+          Ingresos
           <span className="font-normal text-[var(--text-subtle)]">({income.length})</span>
         </h2>
         {income.length === 0 ? (
-          <EmptyState icon="🏷️" title="Sin categorías de ingreso" />
+          <EmptyState icon={<Tag className="h-10 w-10" />} title="Sin categorías de ingreso" />
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
             {income.map((cat) => (
