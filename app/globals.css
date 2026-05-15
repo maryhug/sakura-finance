@@ -1,26 +1,318 @@
 @import "tailwindcss";
 
+/* ═══════════════════════════════════════════════════════════════
+   SAKURA FINANCE — Design System
+   Kawaii × Elegant × Modern
+   ═══════════════════════════════════════════════════════════════ */
+
+@theme {
+  /* ── Sakura palette ── */
+  --color-sakura-50: #fff0f6;
+  --color-sakura-100: #ffe0ee;
+  --color-sakura-200: #ffb3d1;
+  --color-sakura-300: #ff80b0;
+  --color-sakura-400: #f472b6;
+  --color-sakura-500: #ec4899;
+  --color-sakura-600: #db2777;
+  --color-sakura-700: #be185d;
+  --color-sakura-800: #9d174d;
+  --color-sakura-900: #831843;
+
+  /* ── Petal (rose) ── */
+  --color-petal-50: #fff1f2;
+  --color-petal-100: #ffe4e6;
+  --color-petal-200: #fecdd3;
+  --color-petal-300: #fda4af;
+  --color-petal-400: #fb7185;
+  --color-petal-500: #f43f5e;
+
+  /* ── Lavender accent ── */
+  --color-lavender-50: #faf5ff;
+  --color-lavender-100: #f3e8ff;
+  --color-lavender-200: #e9d5ff;
+  --color-lavender-300: #d8b4fe;
+  --color-lavender-400: #c084fc;
+  --color-lavender-500: #a855f7;
+
+  /* ── Mint (income / positive) ── */
+  --color-mint-50: #f0fdf4;
+  --color-mint-100: #dcfce7;
+  --color-mint-200: #bbf7d0;
+  --color-mint-400: #4ade80;
+  --color-mint-500: #22c55e;
+  --color-mint-600: #16a34a;
+
+  /* ── Semantic tokens ── */
+  --color-bg: #fff8fc;
+  --color-surface: #ffffff;
+  --color-surface-2: #fdf0f7;
+  --color-border: #fde8f3;
+  --color-text: #1a0a12;
+  --color-text-muted: #7c4d68;
+  --color-primary: #f472b6;
+  --color-primary-hover: #ec4899;
+  --color-primary-fg: #ffffff;
+  --color-income: #22c55e;
+  --color-expense: #f43f5e;
+
+  /* ── Typography ── */
+  --font-sans: var(--font-nunito), "Nunito", ui-rounded, system-ui, sans-serif;
+
+  /* ── Radius ── */
+  --radius-sm: 0.5rem;
+  --radius-md: 0.75rem;
+  --radius-lg: 1rem;
+  --radius-xl: 1.25rem;
+  --radius-2xl: 1.75rem;
+  --radius-card: 1.25rem;
+
+  /* ── Shadows ── */
+  --shadow-sakura: 0 4px 24px -4px rgba(244, 114, 182, 0.18);
+  --shadow-card: 0 2px 16px -2px rgba(244, 114, 182, 0.12);
+  --shadow-glow: 0 0 20px rgba(244, 114, 182, 0.3);
+}
+
+/* ── Dark mode variant ── */
+@variant dark (&:where(.dark, .dark *));
+
+/* ═══════════════════════════════════════════════════════════════
+   BASE
+   ═══════════════════════════════════════════════════════════════ */
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --bg: #fff8fc;
+  --surface: #ffffff;
+  --surface-2: #fdf0f7;
+  --border: #fde8f3;
+  --border-strong: #fbc9e2;
+  --text: #1a0a12;
+  --text-muted: #7c4d68;
+  --text-subtle: #b07898;
+  --primary: #f472b6;
+  --primary-hover: #ec4899;
+  --primary-light: #fce7f3;
+  --income: #22c55e;
+  --income-bg: #f0fdf4;
+  --expense: #f43f5e;
+  --expense-bg: #fff1f2;
+  --sidebar-w: 260px;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+.dark {
+  --bg: #110a0f;
+  --surface: #1c1018;
+  --surface-2: #241420;
+  --border: #2d1a26;
+  --border-strong: #3d2436;
+  --text: #fce7f3;
+  --text-muted: #d4a0bc;
+  --text-subtle: #8a5070;
+  --primary: #f472b6;
+  --primary-hover: #f9a8d4;
+  --primary-light: #2d1428;
+  --income: #4ade80;
+  --income-bg: #052e16;
+  --expense: #fb7185;
+  --expense-bg: #1f0a0e;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: var(--bg);
+  color: var(--text);
+  font-family: var(--font-sans);
+  min-height: 100vh;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   SCROLLBAR — subtle sakura tint
+   ═══════════════════════════════════════════════════════════════ */
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--surface-2);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border-strong);
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--primary);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   SAKURA UTILITY CLASSES
+   ═══════════════════════════════════════════════════════════════ */
+
+.card-sakura {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-card);
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.card-sakura:hover {
+  box-shadow: var(--shadow-sakura);
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #f472b6 0%, #ec4899 100%);
+  color: white;
+  border-radius: 9999px;
+  padding: 0.625rem 1.5rem;
+  font-weight: 600;
+  font-size: 0.9rem;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 12px rgba(244, 114, 182, 0.35);
+  border: none;
+  cursor: pointer;
+}
+
+.btn-primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 20px rgba(244, 114, 182, 0.5);
+}
+
+.btn-primary:active {
+  transform: translateY(0);
+}
+
+.btn-ghost {
+  background: transparent;
+  color: var(--text-muted);
+  border-radius: 9999px;
+  padding: 0.625rem 1.25rem;
+  font-weight: 500;
+  font-size: 0.9rem;
+  transition: all 0.2s ease;
+  border: 1px solid transparent;
+  cursor: pointer;
+}
+
+.btn-ghost:hover {
+  background: var(--surface-2);
+  color: var(--primary);
+  border-color: var(--border);
+}
+
+.input-sakura {
+  width: 100%;
+  background: var(--surface);
+  border: 1.5px solid var(--border-strong);
+  border-radius: var(--radius-lg);
+  padding: 0.625rem 1rem;
+  color: var(--text);
+  font-size: 0.95rem;
+  font-family: var(--font-sans);
+  transition: all 0.2s ease;
+  outline: none;
+}
+
+.input-sakura::placeholder {
+  color: var(--text-subtle);
+}
+
+.input-sakura:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(244, 114, 182, 0.15);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   DECORATIVE — subtle petal background
+   ═══════════════════════════════════════════════════════════════ */
+
+.petal-bg {
+  background-image: radial-gradient(
+      circle at 20% 50%,
+      rgba(244, 114, 182, 0.06) 0%,
+      transparent 50%
+    ),
+    radial-gradient(
+      circle at 80% 20%,
+      rgba(192, 132, 252, 0.05) 0%,
+      transparent 40%
+    );
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   ANIMATIONS
+   ═══════════════════════════════════════════════════════════════ */
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-6px); }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes scale-in {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+.animate-fade-in {
+  animation: fade-in 0.3s ease-out forwards;
+}
+
+.animate-scale-in {
+  animation: scale-in 0.2s ease-out forwards;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   RECHARTS customization
+   ═══════════════════════════════════════════════════════════════ */
+
+.recharts-tooltip-wrapper {
+  outline: none !important;
+}
+
+.recharts-default-tooltip {
+  background: var(--surface) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: var(--radius-lg) !important;
+  box-shadow: var(--shadow-card) !important;
+  color: var(--text) !important;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   LAYOUT
+   ═══════════════════════════════════════════════════════════════ */
+
+.sidebar {
+  width: var(--sidebar-w);
+  min-width: var(--sidebar-w);
+}
+
+@media (max-width: 768px) {
+  .sidebar {
+    width: 100%;
+  }
 }
