@@ -15,7 +15,10 @@ export const metadata: Metadata = {
     template: "%s — Sakura Finance",
   },
   description: "Tu app de finanzas personales: bonita, simple y poderosa.",
-  icons: { icon: "/favicon.ico" },
+  icons: {
+    icon: "/favicon.ico",
+    apple: '/apple-touch-icon.png',
+  },
 }
 
 export const viewport: Viewport = {

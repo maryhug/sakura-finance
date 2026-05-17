@@ -1,0 +1,19 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm run *)",
+      "Bash(node -e \"const p = require\\('@prisma/adapter-neon'\\); console.log\\(Object.keys\\(p\\)\\)\")",
+      "Bash(node -e \"const n = require\\('@neondatabase/serverless'\\); console.log\\(Object.keys\\(n\\).filter\\(k => !k.startsWith\\('_'\\)\\)\\)\")",
+      "Bash(node -e \"const {PrismaNeonHttp} = require\\('@prisma/adapter-neon'\\); console.log\\(PrismaNeonHttp.length\\); console.log\\(PrismaNeonHttp.toString\\(\\).slice\\(0, 200\\)\\)\")",
+      "Bash(node -e \"const {PrismaNeonHttp} = require\\('@prisma/adapter-neon'\\); const p = new PrismaNeonHttp\\('postgres://x:y@host/db', {}\\); console.log\\('ok'\\)\")",
+      "Bash(node -e ' *)",
+      "Bash(taskkill *)",
+      "PowerShell(Stop-Process *)",
+      "Bash(git add *)",
+      "Bash(git commit -m 'feat\\(ui\\): replace emojis with Lucide React icons *)",
+      "Bash(git commit -m 'fix\\(db\\): switch to PrismaNeonHttp and disable TLS verification in dev *)",
+      "Bash(git commit *)",
+      "Bash(git push *)"
+    ]
+  }
+}
