@@ -5,13 +5,15 @@ import { Button } from "@/components/ui/button"
 import { Banknote } from "lucide-react"
 import type { TransactionWithCategory } from "@/types"
 import type { Category } from "@prisma/client"
+import type { GoalOption } from "@/types"
 
 interface Props {
   transactions: TransactionWithCategory[]
   categories: Category[]
+  savingsGoals?: GoalOption[]
 }
 
-export function TransactionList({ transactions, categories }: Props) {
+export function TransactionList({ transactions, categories, savingsGoals = [] }: Props) {
   if (transactions.length === 0) {
     return (
       <EmptyState
@@ -30,7 +32,7 @@ export function TransactionList({ transactions, categories }: Props) {
   return (
     <div className="space-y-1">
       {transactions.map((tx) => (
-        <TransactionItem key={tx.id} transaction={tx} categories={categories} />
+        <TransactionItem key={tx.id} transaction={tx} categories={categories} savingsGoals={savingsGoals} />
       ))}
     </div>
   )

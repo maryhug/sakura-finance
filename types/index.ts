@@ -1,10 +1,21 @@
-import type { Transaction, Category } from "@prisma/client"
+import type { Transaction, Category, SavingsGoal } from "@prisma/client"
 
 export type TransactionType = "INCOME" | "EXPENSE"
 export type GoalStatus = "ACTIVE" | "COMPLETED" | "PAUSED"
 
-export type TransactionWithCategory = Transaction & {
+// SavingsGoal con Decimals serializados a number (para pasar a Client Components)
+export type SerializedSavingsGoal = Omit<SavingsGoal, "targetAmount" | "currentAmount"> & {
+  targetAmount: number
+  currentAmount: number
+}
+
+// Tipo mínimo para el selector de metas en formularios
+export type GoalOption = { id: string; name: string; status: GoalStatus }
+
+export type TransactionWithCategory = Omit<Transaction, "amount"> & {
+  amount: number
   category: Category | null
+  savingsGoal: SerializedSavingsGoal | null
 }
 
 export type CategoryWithCount = Category & {

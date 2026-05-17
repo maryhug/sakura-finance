@@ -17,6 +17,7 @@ export async function createTransaction(formData: FormData): Promise<ActionResul
     categoryId: (formData.get("categoryId") as string) || undefined,
     date: formData.get("date") as string,
     notes: (formData.get("notes") as string) || undefined,
+    savingsGoalId: (formData.get("savingsGoalId") as string) || undefined,
   }
 
   const parsed = transactionSchema.safeParse(raw)
@@ -24,22 +25,37 @@ export async function createTransaction(formData: FormData): Promise<ActionResul
     return { success: false, error: parsed.error.issues[0]?.message }
   }
 
-  const { description, amount, type, categoryId, date, notes } = parsed.data
+  const { description, amount, type, categoryId, date, notes, savingsGoalId } = parsed.data
+  const numAmount = parseFloat(amount)
 
-  await prisma.transaction.create({
-    data: {
-      description,
-      amount: parseFloat(amount),
-      type: type as TransactionType,
-      categoryId: categoryId || null,
-      date: new Date(date),
-      notes: notes || null,
-      userId: user.id,
-    },
+  await prisma.$transaction(async (tx) => {
+    await tx.transaction.create({
+      data: {
+        description,
+        amount: numAmount,
+        type: type as TransactionType,
+        categoryId: categoryId || null,
+        date: new Date(date),
+        notes: notes || null,
+        userId: user.id,
+        savingsGoalId: savingsGoalId || null,
+      },
+    })
+
+    if (savingsGoalId) {
+      const goal = await tx.savingsGoal.findFirst({ where: { id: savingsGoalId, userId: user.id } })
+      if (goal) {
+        await tx.savingsGoal.update({
+          where: { id: savingsGoalId },
+          data: { currentAmount: { increment: numAmount } },
+        })
+      }
+    }
   })
 
   revalidatePath("/dashboard")
   revalidatePath("/transactions")
+  revalidatePath("/savings")
   return { success: true }
 }
 
@@ -53,6 +69,7 @@ export async function updateTransaction(id: string, formData: FormData): Promise
     categoryId: (formData.get("categoryId") as string) || undefined,
     date: formData.get("date") as string,
     notes: (formData.get("notes") as string) || undefined,
+    savingsGoalId: (formData.get("savingsGoalId") as string) || undefined,
   }
 
   const parsed = transactionSchema.safeParse(raw)
@@ -60,38 +77,77 @@ export async function updateTransaction(id: string, formData: FormData): Promise
     return { success: false, error: parsed.error.issues[0]?.message }
   }
 
-  const tx = await prisma.transaction.findFirst({ where: { id, userId: user.id } })
-  if (!tx) return { success: false, error: "Movimiento no encontrado" }
+  const existing = await prisma.transaction.findFirst({ where: { id, userId: user.id } })
+  if (!existing) return { success: false, error: "Movimiento no encontrado" }
 
-  const { description, amount, type, categoryId, date, notes } = parsed.data
+  const { description, amount, type, categoryId, date, notes, savingsGoalId } = parsed.data
+  const newAmount = parseFloat(amount)
+  const oldAmount = parseFloat(String(existing.amount))
+  const oldGoalId = existing.savingsGoalId
+  const newGoalId = savingsGoalId || null
 
-  await prisma.transaction.update({
-    where: { id },
-    data: {
-      description,
-      amount: parseFloat(amount),
-      type: type as TransactionType,
-      categoryId: categoryId || null,
-      date: new Date(date),
-      notes: notes || null,
-    },
+  await prisma.$transaction(async (tx) => {
+    await tx.transaction.update({
+      where: { id },
+      data: {
+        description,
+        amount: newAmount,
+        type: type as TransactionType,
+        categoryId: categoryId || null,
+        date: new Date(date),
+        notes: notes || null,
+        savingsGoalId: newGoalId,
+      },
+    })
+
+    // Reverse old contribution
+    if (oldGoalId) {
+      const oldGoal = await tx.savingsGoal.findUnique({ where: { id: oldGoalId } })
+      if (oldGoal) {
+        const adjusted = Math.max(0, parseFloat(String(oldGoal.currentAmount)) - oldAmount)
+        await tx.savingsGoal.update({ where: { id: oldGoalId }, data: { currentAmount: adjusted } })
+      }
+    }
+
+    // Apply new contribution
+    if (newGoalId) {
+      const newGoal = await tx.savingsGoal.findFirst({ where: { id: newGoalId, userId: user.id } })
+      if (newGoal) {
+        await tx.savingsGoal.update({
+          where: { id: newGoalId },
+          data: { currentAmount: { increment: newAmount } },
+        })
+      }
+    }
   })
 
   revalidatePath("/dashboard")
   revalidatePath("/transactions")
+  revalidatePath("/savings")
   return { success: true }
 }
 
 export async function deleteTransaction(id: string): Promise<ActionResult> {
   const user = await requireAuth()
 
-  const tx = await prisma.transaction.findFirst({ where: { id, userId: user.id } })
-  if (!tx) return { success: false, error: "Movimiento no encontrado" }
+  const existing = await prisma.transaction.findFirst({ where: { id, userId: user.id } })
+  if (!existing) return { success: false, error: "Movimiento no encontrado" }
 
-  await prisma.transaction.delete({ where: { id } })
+  await prisma.$transaction(async (tx) => {
+    await tx.transaction.delete({ where: { id } })
+
+    if (existing.savingsGoalId) {
+      const goal = await tx.savingsGoal.findUnique({ where: { id: existing.savingsGoalId } })
+      if (goal) {
+        const adjusted = Math.max(0, parseFloat(String(goal.currentAmount)) - parseFloat(String(existing.amount)))
+        await tx.savingsGoal.update({ where: { id: existing.savingsGoalId }, data: { currentAmount: adjusted } })
+      }
+    }
+  })
 
   revalidatePath("/dashboard")
   revalidatePath("/transactions")
+  revalidatePath("/savings")
   return { success: true }
 }
 
@@ -110,11 +166,25 @@ export async function getTransactions(
     }
   }
 
-  return prisma.transaction.findMany({
+  const toNum = (v: unknown) => parseFloat(String(v))
+
+  const rows = await prisma.transaction.findMany({
     where,
-    include: { category: true },
+    include: { category: true, savingsGoal: true },
     orderBy: { date: "desc" },
   })
+
+  return rows.map((tx) => ({
+    ...tx,
+    amount: toNum(tx.amount),
+    savingsGoal: tx.savingsGoal
+      ? {
+          ...tx.savingsGoal,
+          targetAmount: toNum(tx.savingsGoal.targetAmount),
+          currentAmount: toNum(tx.savingsGoal.currentAmount),
+        }
+      : null,
+  }))
 }
 
 export async function getDashboardStats(): Promise<DashboardStats> {

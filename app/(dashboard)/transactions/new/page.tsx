@@ -6,11 +6,15 @@ import { TransactionForm } from "@/components/transactions/transaction-form"
 import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { getCategories } from "@/actions/categories"
+import { getSavingsGoals } from "@/actions/savings"
+import type { GoalStatus } from "@/types"
 
 export const metadata: Metadata = { title: "Nuevo movimiento" }
 
 export default async function NewTransactionPage() {
-  const categories = await getCategories()
+  const [categories, rawGoals] = await Promise.all([getCategories(), getSavingsGoals()])
+
+  const savingsGoals = rawGoals.map((g) => ({ id: g.id, name: g.name, status: g.status as GoalStatus }))
 
   return (
     <div className="space-y-5 animate-fade-in max-w-lg mx-auto">
@@ -29,7 +33,7 @@ export default async function NewTransactionPage() {
 
       <Card>
         <CardContent className="pt-5">
-          <TransactionForm categories={categories} />
+          <TransactionForm categories={categories} savingsGoals={savingsGoals} />
         </CardContent>
       </Card>
     </div>

@@ -9,7 +9,8 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { getTransactions } from "@/actions/transactions"
 import { getCategories } from "@/actions/categories"
-import type { TransactionType } from "@/types"
+import { getSavingsGoals } from "@/actions/savings"
+import type { TransactionType, GoalStatus } from "@/types"
 import { formatCurrency, toDecimal } from "@/lib/utils"
 
 export const metadata: Metadata = { title: "Movimientos" }
@@ -31,7 +32,7 @@ export default async function TransactionsPage({ searchParams }: Props) {
     to = new Date(y, m, 0, 23, 59, 59)
   }
 
-  const [transactions, categories] = await Promise.all([
+  const [transactions, categories, rawGoals] = await Promise.all([
     getTransactions({
       type: type ? (type as TransactionType) : undefined,
       categoryId: categoryId || undefined,
@@ -39,7 +40,10 @@ export default async function TransactionsPage({ searchParams }: Props) {
       to,
     }),
     getCategories(),
+    getSavingsGoals(),
   ])
+
+  const savingsGoals = rawGoals.map((g) => ({ id: g.id, name: g.name, status: g.status as GoalStatus }))
 
   const totalIncome = transactions
     .filter((t) => t.type === "INCOME")
@@ -93,7 +97,7 @@ export default async function TransactionsPage({ searchParams }: Props) {
       {/* List */}
       <Card>
         <CardContent className="pt-5">
-          <TransactionList transactions={transactions} categories={categories} />
+          <TransactionList transactions={transactions} categories={categories} savingsGoals={savingsGoals} />
         </CardContent>
       </Card>
     </div>

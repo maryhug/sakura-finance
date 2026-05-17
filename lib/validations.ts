@@ -23,6 +23,7 @@ export const transactionSchema = z.object({
   categoryId: z.string().optional(),
   date: z.string().min(1, "La fecha es requerida"),
   notes: z.string().max(300).optional(),
+  savingsGoalId: z.string().optional(),
 })
 
 export const categorySchema = z.object({

@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useTransition } from "react"
-import { TrendingUp, TrendingDown, Pencil, Trash2 } from "lucide-react"
+import { TrendingUp, TrendingDown, Pencil, Trash2, PiggyBank } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Dialog, DialogHeader, DialogTitle, DialogClose } from "@/components/ui/dialog"
@@ -11,13 +11,15 @@ import { deleteTransaction } from "@/actions/transactions"
 import { formatCurrency, formatDate, cn } from "@/lib/utils"
 import type { TransactionWithCategory } from "@/types"
 import type { Category } from "@prisma/client"
+import type { GoalOption } from "@/types"
 
 interface Props {
   transaction: TransactionWithCategory
   categories: Category[]
+  savingsGoals?: GoalOption[]
 }
 
-export function TransactionItem({ transaction, categories }: Props) {
+export function TransactionItem({ transaction, categories, savingsGoals = [] }: Props) {
   const [editOpen, setEditOpen] = useState(false)
   const [deleteOpen, setDeleteOpen] = useState(false)
   const [isPending, startTransition] = useTransition()
@@ -60,6 +62,12 @@ export function TransactionItem({ transaction, categories }: Props) {
                 style={{ borderColor: transaction.category.color + "40", color: transaction.category.color }}
               >
                 {transaction.category.name}
+              </Badge>
+            )}
+            {transaction.savingsGoal && (
+              <Badge variant="soft" className="text-xs py-0 gap-1 text-sakura-500 border-sakura-200">
+                <PiggyBank className="h-3 w-3" />
+                {transaction.savingsGoal.name}
               </Badge>
             )}
             {transaction.notes && (
@@ -109,6 +117,7 @@ export function TransactionItem({ transaction, categories }: Props) {
         </DialogHeader>
         <TransactionForm
           categories={categories}
+          savingsGoals={savingsGoals}
           transaction={transaction}
           onSuccess={() => setEditOpen(false)}
         />

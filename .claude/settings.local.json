@@ -13,7 +13,8 @@
       "Bash(git commit -m 'feat\\(ui\\): replace emojis with Lucide React icons *)",
       "Bash(git commit -m 'fix\\(db\\): switch to PrismaNeonHttp and disable TLS verification in dev *)",
       "Bash(git commit *)",
-      "Bash(git push *)"
+      "Bash(git push *)",
+      "mcp__ide__getDiagnostics"
     ]
   }
 }

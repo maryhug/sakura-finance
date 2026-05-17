@@ -12,15 +12,17 @@ import { Toast, useToast } from "@/components/ui/toast"
 import { transactionSchema, type TransactionInput } from "@/lib/validations"
 import { createTransaction, updateTransaction } from "@/actions/transactions"
 import { cn } from "@/lib/utils"
-import type { Category, Transaction } from "@prisma/client"
+import type { Category } from "@prisma/client"
+import type { GoalOption, TransactionWithCategory } from "@/types"
 
 interface Props {
   categories: Category[]
-  transaction?: Transaction
+  savingsGoals?: GoalOption[]
+  transaction?: TransactionWithCategory
   onSuccess?: () => void
 }
 
-export function TransactionForm({ categories, transaction, onSuccess }: Props) {
+export function TransactionForm({ categories, savingsGoals = [], transaction, onSuccess }: Props) {
   const router = useRouter()
   const [isPending, startTransition] = useTransition()
   const { toast, show, hide } = useToast()
@@ -44,6 +46,7 @@ export function TransactionForm({ categories, transaction, onSuccess }: Props) {
         ? format(new Date(transaction.date), "yyyy-MM-dd")
         : format(new Date(), "yyyy-MM-dd"),
       notes: transaction?.notes ?? "",
+      savingsGoalId: transaction?.savingsGoalId ?? "",
     },
   })
 
@@ -149,6 +152,24 @@ export function TransactionForm({ categories, transaction, onSuccess }: Props) {
             </option>
           ))}
         </Select>
+
+        {/* Savings goal */}
+        {savingsGoals.length > 0 && (
+          <Select
+            label="Meta de ahorro (opcional)"
+            error={errors.savingsGoalId?.message}
+            {...register("savingsGoalId")}
+          >
+            <option value="">Sin meta</option>
+            {savingsGoals
+              .filter((g) => g.status === "ACTIVE")
+              .map((goal) => (
+                <option key={goal.id} value={goal.id}>
+                  {goal.name}
+                </option>
+              ))}
+          </Select>
+        )}
 
         {/* Notes */}
         <Textarea
